@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- <cocoon:plugin name="cordova-plugin-camera"/>
+<cocoon:plugin name="cordova-plugin-media-capture"/>
+<cocoon:plugin name="cordova-plugin-media"/>
+<cocoon:plugin name="cordova-plugin-file"/>
+<cocoon:plugin name="cordova-plugin-device"/> -->
+<head>
+  <title>Driver Assistance System</title>
+  <meta charset="utf-8">
+  <!-- Import the webpage's stylesheet -->
+  <link rel="stylesheet" href="style.css" />
+</head>  
+<body>
+  <!-- Make a drop-down menu for the user to switch between pages -->
+  <ul>
+    <li><a href="http://localhost:3000/">Home</a></li>
+    <li><a href="http://localhost:3000/about">About</a></li>
+  </ul>
+  <h1>Driver Assistance System</h1>
+  <p>The enable button is not visible fow now as the model is loading.</p
+>  <section id="demos" class="invisible">
+    <p>Click "enable webcam" below when you are ready and allow access to the webcam when the browser asks.Please put your face to the camera, different angle, distance or lighting might affect the model performance.</p>
+    <div id="liveView" class="camView">
+      <button id="webcamButton">Enable Webcam</button>
+      <video id="webcam" autoplay muted width="640" height="480"></video>
+    </div>
+  </section>
+  <form action="/" method="post">
+   <div>
+      Please input your district:
+     <input type="text" name="district">
+     <input type="submit" value= "Submit">
+     (Kowloon,Hong Kong Island or New Territories)
+   </div>
+  </form>
+  <!-- Import TensorFlow.js library -->
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs/dist/tf.min.js" type="text/javascript"></script>
+  <!-- Load the coco-ssd model to use to recognize things in images -->
+  <!-- <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd"></script> -->
+  <!-- Import the page's JavaScript to do some stuff -->
+  <script src="script.js" defer></script>
+  <script src="app.js" defer></script>
+  <script src="server.js" defer></script>
+  
+  <!-- <script>
+    if (newNode = "Kowloon") {
+      alert("The driver is in a dangerous district! Please pay deep attention to the driver")
+    }
+  </script> -->
+  
+  </body>
+</html>
