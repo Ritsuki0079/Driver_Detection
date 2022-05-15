@@ -1,0 +1,27 @@
+labelImg
+
+cd C:\Users\user\ITP4869\TFODS\
+
+python -m venv fyp
+
+.\tfod\Scripts\activate
+
+deactivate
+
+cd TFODCourse\
+
+cd C:\Users\user\ITP4869\TFODS\TFODCourse\Tensorflow\workspace\models\Reciept\eval
+
+cd C:\Users\user\ITP4869\TFODS\TFODCourse\Tensorflow\workspace\models\faceDect\eval
+
+tensorboard --logdir=. 
+
+http://localhost:6006/
+
+'Reciept'
+'Open_Eyes'
+'Close_Eyes'
+
+'faceDect'
+'open'
+'close'
