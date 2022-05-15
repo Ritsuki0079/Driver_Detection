@@ -1,17 +1,16 @@
 const video = document.getElementById('webcam');
 const liveView = document.getElementById('liveView');
-const demosSection = document.getElementById('demos');
-const enableWebcamButton = document.getElementById('webcamButton');
+const DemoView = document.getElementById('demo');
+const enableWebcamButton = document.getElementById('Camerabutton');
 
-// Check if webcam access is supported.
+// Check if webcam access is supported by the user's browser.
 function getUserMediaSupported() {
     return !!(navigator.mediaDevices &&
       navigator.mediaDevices.getUserMedia);
   }
   
-  // If webcam supported, add event listener to button for when user
-  // wants to activate it to call enableCam function which we will 
-  // define in the next step.
+  // Add an event listener to button for when the user
+  // wants to activate the camera to call enableCam function.
   if (getUserMediaSupported()) {
     enableWebcamButton.addEventListener('click', enableCam);
   } else {
@@ -20,7 +19,7 @@ function getUserMediaSupported() {
   
   // Enable the live webcam view and start classification.
 function enableCam(event) {
-    // Only continue if the COCO-SSD has finished loading.
+    // Only continue if the model loaded successfully.
     if (!model) {
       return;
     }
@@ -33,16 +32,13 @@ function enableCam(event) {
       video: true
     };
   
-    // Activate the webcam stream.
+    // Enable camera streaming.
     navigator.mediaDevices.getUserMedia(constraints).then(function(stream) {
       video.srcObject = stream;
       video.addEventListener('loadeddata', predictWebcam);
     });
   }
-
-// Store the resulting model in the global scope of our app.
-// ********
-
+// Load the model.
 var model = undefined;
 
  async function loadmodel() {
@@ -50,29 +46,27 @@ var model = undefined;
  	 const model = await tf.loadGraphModel('model.json');
  	 console.log( "Model loaded." );
    console.log(model)
-   demosSection.classList.remove('invisible');
+   DemoView.classList.remove('hide');
  };
 
  model = loadmodel();
  
 
-var children = [];
+var Arr = [];
 
 function predictWebcam() {
-  // Now let's start classifying a frame in the stream.
-  //model.detect(video) or predict ?
-  model.detect(video).then(function (predictions) {
-    // Remove any highlighting we did previous frame.
-    for (let i = 0; i < children.length; i++) {
-      liveView.removeChild(children[i]);
+  // Classify a frame in the camera stream.
+  model.predict(video).then(function (predictions) {
+    // Remove the bounding box in the previous frame.
+    for (let i = 0; i < Arr.length; i++) {
+      liveView.removeChild(Arr[i]);
     }
-    children.splice(0);
+    Arr.splice(0);
     
-    // Now lets loop through predictions and draw them to the live view if
-    // they have a high confidence score.
+    // Loop the predictions and draw them to camera in the website.
     for (let n = 0; n < predictions.length; n++) {
-      // If we are over 66% sure we are sure we classified it right, draw it!
-      if (predictions[n].score > 0.66) {
+      // If the prediction accuacy is over 50% then draw the bounding box.
+      if (predictions[n].score > 0.5) {
         const p = document.createElement('p');
         p.innerText = predictions[n].class  + ' - with ' 
             + Math.round(parseFloat(predictions[n].score) * 100) 
@@ -90,12 +84,12 @@ function predictWebcam() {
 
         liveView.appendChild(highlighter);
         liveView.appendChild(p);
-        children.push(highlighter);
-        children.push(p);
+        Arr.push(highlighter);
+        Arr.push(p);
       }
     }
     
-    // Call this function again to keep predicting when the browser is ready.
+    // Predict again when the browser is ready.
     window.requestAnimationFrame(predictWebcam);
   });
 }
